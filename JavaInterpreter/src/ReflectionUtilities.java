@@ -135,19 +135,22 @@ public class ReflectionUtilities {
 			// match
 			method = methods[i];
 
-			// Print each method name
-			System.out.println("\nMethod name: " + method.getName() + "  |  Method Param Types: "
-					+ Arrays.toString((method.getParameterTypes())));
+			// // Print each method name
+			// System.out.println("\nMethod name: " + method.getName() + " | Method Param
+			// Types: "
+			// + Arrays.toString((method.getParameterTypes())));
 
-			// Check each type
-			System.out.println("Same Params? " + typesMatch(method.getParameterTypes(), args));
+			// // Check each type
+			// System.out.println("Same Params? " + typesMatch(method.getParameterTypes(),
+			// args));
 
-			// Check the names
-			System.out.println("\nSame names? " + Boolean.toString(method.getName() == name));
-			System.out.println(method.getName());
-			System.out.println(name);
+			// // Check the names
+			// System.out.println("\nSame names? " +
+			// Boolean.toString(method.getName().equals(name)));
+			// System.out.println(method.getName());
+			// System.out.println(name);
 
-			if (method.getName() == name && typesMatch(method.getParameterTypes(), args)) {
+			if (method.getName().equals(name) && typesMatch(method.getParameterTypes(), args)) {
 				// Invoke method and get the result
 				System.out.println("\nSelected Method name: " + method.getName());
 				try {

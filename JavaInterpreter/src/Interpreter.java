@@ -66,7 +66,7 @@ public class Interpreter {
 		// Check if in symbol table
 		if (mySymbolTable.containsKey(name)) {
 			// If so, get the object it is associated with
-			System.out.println("Found " + name + "in symbol table...");
+			System.out.println("Found " + name + " in symbol table...");
 			return mySymbolTable.get(name);
 		} else if (name.startsWith("\"")) {
 			// Create new string object with same characters as the name
@@ -100,6 +100,9 @@ public class Interpreter {
 	 * should be a basic message telling what happened.
 	 */
 	public String makeObject(ParseResults parse) {
+
+		// Get object of arguments
+		Object args = convertNameToInstance(parse.arguments);
 
 		// Add to symbol table
 		mySymbolTable.put(parse.objectName, parse.className);
