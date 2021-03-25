@@ -66,12 +66,15 @@ public class Interpreter {
 		// Check if in symbol table
 		if (mySymbolTable.containsKey(name)) {
 			// If so, get the object it is associated with
+			System.out.println("Found " + name + "in symbol table...");
 			return mySymbolTable.get(name);
 		} else if (name.startsWith("\"")) {
 			// Create new string object with same characters as the name
+			System.out.println("String literal for " + name + "...");
 			return name.replaceAll("^\"|\"$", "");
 		} else {
 			// Integer literal
+			System.out.println("Interger literal for " + name + "...");
 			return Integer.parseInt(name);
 		}
 	}
@@ -127,10 +130,13 @@ public class Interpreter {
 
 		// Get the object whos method is being called
 		Object object = convertNameToInstance(parse.objectName);
-		System.out.println("Object Name: " + object);
+
+		// Convert the parse's arguments into valid objects
+		Object[] args = convertNameToInstance(parse.arguments);
+		System.out.println("Converted arguments to: " + args.getClass().getComponentType());
 
 		// Call the method in RU
-		Object result = ReflectionUtilities.callMethod(parse.objectName, parse.methodName, parse.arguments);
+		Object result = ReflectionUtilities.callMethod(object, parse.methodName, args);
 		System.out.println("Result: " + result);
 
 		// Create a new object for output or change the existing object in the Symbol
