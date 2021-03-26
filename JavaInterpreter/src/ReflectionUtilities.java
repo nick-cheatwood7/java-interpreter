@@ -3,12 +3,9 @@
  * Shannon Duvall and Nick Cheatwood
  * This object does basic reflection functions
  */
+
 import java.lang.reflect.*;
 import java.lang.Class;
-import java.util.Arrays;
-import java.util.Objects;
-
-import jdk.internal.joptsimple.internal.Classes;
 
 public class ReflectionUtilities {
 

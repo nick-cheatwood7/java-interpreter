@@ -8,8 +8,6 @@
  * Do not change anything in this file.
  */
 import junit.framework.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Tester extends TestCase {
 	public Tester() {
@@ -27,7 +25,6 @@ public class Tester extends TestCase {
 		try {
 			mClass = Class.forName("MyClass");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			mClass = null;
 		}
