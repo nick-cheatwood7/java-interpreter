@@ -6,6 +6,9 @@
 import java.lang.reflect.*;
 import java.lang.Class;
 import java.util.Arrays;
+import java.util.Objects;
+
+import jdk.internal.joptsimple.internal.Classes;
 
 public class ReflectionUtilities {
 
@@ -17,8 +20,8 @@ public class ReflectionUtilities {
 	 * with ints. This method works - don't change it.
 	 */
 	private static boolean typesMatchInts(Class<?> maybeIntClass, Object maybeIntObj) {
-		System.out.println("I'm checking on " + maybeIntObj);
-		System.out.println(maybeIntObj.getClass());
+		// System.out.println("I'm checking on " + maybeIntObj);
+		// System.out.println(maybeIntObj.getClass());
 		try {
 			return (maybeIntClass == int.class) && (int.class.isAssignableFrom(maybeIntObj.getClass())
 					|| maybeIntObj.getClass() == Class.forName("java.lang.Integer"));
@@ -28,7 +31,7 @@ public class ReflectionUtilities {
 	}
 
 	/*
-	 * TODO: typesMatch Takes an array of Classes and an array of Objects and tells
+	 * typesMatch Takes an array of Classes and an array of Objects and tells
 	 * whether or not the object is an instance of the associated class, and that
 	 * the two arrays are the same length. For objects, the isInstance method makes
 	 * this easy. For ints, use the method I provided above.
@@ -54,16 +57,16 @@ public class ReflectionUtilities {
 	}
 
 	/*
-	 * TODO: createInstance Given String representing fully qualified name of a
-	 * class and the actual parameters, returns initialized instance of the
-	 * corresponding class using matching constructor. You need to use typesMatch to
-	 * do this correctly. Use the class to get all the Constructors, then check each
-	 * one to see if the types of the constructor parameters match the actual
-	 * parameters given.
+	 * createInstance Given String representing fully qualified name of a class and
+	 * the actual parameters, returns initialized instance of the corresponding
+	 * class using matching constructor. You need to use typesMatch to do this
+	 * correctly. Use the class to get all the Constructors, then check each one to
+	 * see if the types of the constructor parameters match the actual parameters
+	 * given.
 	 */
 	public static Object createInstance(String name, Object[] args) {
 
-		System.out.println("Instance: " + name);
+		// System.out.println("Instance: " + name);
 		Object object = null;
 		Class<?> someClass;
 		Constructor<?>[] constructors;
@@ -88,25 +91,27 @@ public class ReflectionUtilities {
 		// parameters provided
 		for (int i = 0; i < constructors.length; i++) {
 			// if constructor matches then return a valid object, else null
-			try {
-				object = typesMatch(constructors[i].getParameterTypes(), args) ? constructors[i].newInstance(args) : null;
-			} catch (InstantiationException e) {
-				// Error, keep object null
-			} catch (IllegalAccessException e) {
-				// Error, keep object null
-			} catch (IllegalArgumentException e) {
-				// Error, keep object null
-			} catch (InvocationTargetException e) {
-				// Error, keep object null
+			if (typesMatch(constructors[i].getParameterTypes(), args)) {
+				try {
+					object = constructors[i].newInstance(args);
+				} catch (InstantiationException e) {
+					// Error, keep object null
+				} catch (IllegalAccessException e) {
+					// Error, keep object null
+				} catch (IllegalArgumentException e) {
+					// Error, keep object null
+				} catch (InvocationTargetException e) {
+					// Error, keep object null
+				}
 			}
 		}
 		return object;
 	}
 
 	/*
-	 * TODO: callMethod Given a target object with a method of the given name that
-	 * takes the given actual parameters, call the named method on that object and
-	 * return the result.
+	 * callMethod Given a target object with a method of the given name that takes
+	 * the given actual parameters, call the named method on that object and return
+	 * the result.
 	 *
 	 * If the method's return type is void, null is returned.
 	 *
@@ -119,12 +124,12 @@ public class ReflectionUtilities {
 		Method method = null;
 		Object methodResult = null;
 
-		System.out.println("\nTarget: " + target.toString());
-		System.out.println("Class: " + target.getClass().toString());
-		System.out.println("Method: " + name);
-		System.out.println("Args: " + Arrays.toString(args));
-		System.out.println("Arg types: " + args.getClass().getComponentType());
-		System.out.println();
+		// System.out.println("\nTarget: " + target.getClass().toGenericString());
+		// System.out.println("Class: " + target.getClass().toGenericString());
+		// System.out.println("Method: " + name);
+		// System.out.println("Args: " + Arrays.toString(args));
+		// System.out.println("Arg types: " + args.getClass().getComponentType());
+		// System.out.println();
 
 		// Define the class
 		Class<?> someClass = target.getClass();
@@ -152,7 +157,7 @@ public class ReflectionUtilities {
 
 			if (method.getName().equals(name) && typesMatch(method.getParameterTypes(), args)) {
 				// Invoke method and get the result
-				System.out.println("\nSelected Method name: " + method.getName());
+				// System.out.println("\nSelected Method name: " + method.getName());
 				try {
 					methodResult = method.getReturnType().equals(Void.TYPE) ? null : method.invoke(target, args);
 				} catch (IllegalAccessException e) {
