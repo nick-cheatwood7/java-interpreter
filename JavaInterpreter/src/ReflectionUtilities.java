@@ -17,8 +17,6 @@ public class ReflectionUtilities {
 	 * with ints. This method works - don't change it.
 	 */
 	private static boolean typesMatchInts(Class<?> maybeIntClass, Object maybeIntObj) {
-		// System.out.println("I'm checking on " + maybeIntObj);
-		// System.out.println(maybeIntObj.getClass());
 		try {
 			return (maybeIntClass == int.class) && (int.class.isAssignableFrom(maybeIntObj.getClass())
 					|| maybeIntObj.getClass() == Class.forName("java.lang.Integer"));
@@ -121,13 +119,6 @@ public class ReflectionUtilities {
 		Method method = null;
 		Object methodResult = null;
 
-		// System.out.println("\nTarget: " + target.getClass().toGenericString());
-		// System.out.println("Class: " + target.getClass().toGenericString());
-		// System.out.println("Method: " + name);
-		// System.out.println("Args: " + Arrays.toString(args));
-		// System.out.println("Arg types: " + args.getClass().getComponentType());
-		// System.out.println();
-
 		// Define the class
 		Class<?> someClass = target.getClass();
 		Method[] methods = someClass.getDeclaredMethods();
@@ -137,26 +128,11 @@ public class ReflectionUtilities {
 			// match
 			method = methods[i];
 
-			// // Print each method name
-			// System.out.println("\nMethod name: " + method.getName() + " | Method Param
-			// Types: "
-			// + Arrays.toString((method.getParameterTypes())));
-
-			// // Check each type
-			// System.out.println("Same Params? " + typesMatch(method.getParameterTypes(),
-			// args));
-
-			// // Check the names
-			// System.out.println("\nSame names? " +
-			// Boolean.toString(method.getName().equals(name)));
-			// System.out.println(method.getName());
-			// System.out.println(name);
-
 			if (method.getName().equals(name) && typesMatch(method.getParameterTypes(), args)) {
 				// Invoke method and get the result
-				// System.out.println("\nSelected Method name: " + method.getName());
 				try {
-					methodResult = method.getReturnType().equals(Void.TYPE) ? null : method.invoke(target, args);
+					methodResult = method.invoke(target, args);
+					methodResult = method.getReturnType().equals(Void.TYPE) ? null : methodResult;
 				} catch (IllegalAccessException e) {
 					// Error
 				} catch (InvocationTargetException e) {

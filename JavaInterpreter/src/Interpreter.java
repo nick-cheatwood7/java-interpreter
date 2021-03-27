@@ -1,5 +1,5 @@
 /*
- * Shannon Duvall
+ * Shannon Duvall and Nick Cheatwood
  * A small Java Interpreter
  * Practice using reflection and understanding how Java works.
  */
@@ -67,15 +67,12 @@ public class Interpreter {
 		// Check if in symbol table
 		if (mySymbolTable.containsKey(name)) {
 			// If so, get the object it is associated with
-			// System.out.println("\nFound " + name + " in symbol table...");
 			return mySymbolTable.get(name);
 		} else if (name.startsWith("\"")) {
 			// Create new string object with same characters as the name
-			// System.out.println("\nString literal for " + name + "...");
 			return name.replace("\"", "");
 		} else {
 			// Integer literal
-			// System.out.println("\nInteger literal for " + name + "...");
 			return Integer.parseInt(name);
 		}
 	}
@@ -102,21 +99,14 @@ public class Interpreter {
 	 */
 	public String makeObject(ParseResults parse) {
 
-		// View parse data
-		// System.out.println("\nParse Results: \n" + parse);
-
 		// Get object of arguments
 		Object[] args = convertNameToInstance(parse.arguments);
 
 		// Create the instance
-		// TODO: why is this null for Strings (i.e standard classes)?
 		Object instance = ReflectionUtilities.createInstance(parse.className, args);
 
 		// Add to symbol table
 		mySymbolTable.put(parse.objectName, instance);
-		// mySymbolTable.put(parse.objectName, new java.lang.String("Interpreter"));
-
-		// System.out.println("Table: " + mySymbolTable.toString());
 
 		// Describe what happened
 		String message = "Ok. I have a new " + parse.className + " called " + parse.objectName;
@@ -142,22 +132,21 @@ public class Interpreter {
 
 		// Convert the parse's arguments into valid objects
 		Object args[] = convertNameToInstance(parse.arguments);
-		// System.out.println("\nConverted arguments to: " +
-		// args.getClass().getComponentType());
 
 		// Call the method in RU
 		Object result = ReflectionUtilities.callMethod(object, parse.methodName, args);
-		// System.out.println("\nResult: " + result);
 
 		// Create a new object for output or change the existing object in the Symbol
 		// table
 		if (mySymbolTable.containsKey(parse.answerName)) {
 			// Update the symbol table
-			// Grab the old value and new value
 			Object oldValue = mySymbolTable.get(parse.answerName);
 			Object newValue = result;
 			mySymbolTable.replace(parse.answerName, oldValue, newValue);
-			message = "I changed the value of " + parse.objectName + " to my result, " + result;
+			message = "I changed the value of " + parse.answerName + " to my result, " + result;
+		} else if (parse.answerName.isEmpty() || parse.answerName == null) {
+			// Print the operation was performed
+			message = "I performed the operation. My answer is: " + result;
 		} else {
 			// Add to the symbols table
 			mySymbolTable.put(parse.answerName, result);
